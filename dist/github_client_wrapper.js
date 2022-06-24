@@ -15,10 +15,10 @@ class GitHubClientWrapper {
     }
     ;
     get_current_pull_request_number() {
-        if (!this.context.payload.issue || !this.context.payload.issue.pull_request) {
-            throw new Error('Issue is not a pull request! No pull request found in context');
+        if (!this.context.payload.pull_request) {
+            throw new Error('This is not a pull request! No pull request found in context');
         }
-        return this.context.payload.issue.number;
+        return this.context.payload.pull_request.number;
     }
     ;
     async comment_on_pull_request_async(pr_number, comment) {
@@ -30,7 +30,6 @@ class GitHubClientWrapper {
         });
     }
     ;
-    // TODO: make this strongly typed
     async fast_forward_target_to_source_async(pr_number) {
         const pullRequestData = await this.get_pull_request(pr_number);
         await this.restClient.git.updateRef({
@@ -59,6 +58,7 @@ class GitHubClientWrapper {
         const pullRequestData = await this.get_pull_request(pr_number);
         return pullRequestData.base.ref;
     }
+    // TODO: make this strongly typed
     async get_pull_request(pr_number) {
         const getPrResponse = await this.restClient.pulls.get({
             owner: this.owner,
