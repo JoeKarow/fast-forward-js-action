@@ -3,6 +3,7 @@ import { RestEndpointMethods } from "@octokit/plugin-rest-endpoint-methods/dist-
 import { OctokitResponse } from "@octokit/types/dist-types/OctokitResponse";
 import { Context } from '@actions/github/lib/context';
 import { GitHubClient } from './github_client_interface';
+import core from '@actions/core'
 
 export class GitHubClientWrapper implements GitHubClient{
 
@@ -17,11 +18,11 @@ export class GitHubClientWrapper implements GitHubClient{
   };
   
   get_current_pull_request_number(): number {
-    if (!this.context.payload.pull_request){
+    if (!this.context.payload.pull_request || !core.getInput('pr')){
       throw new Error('This is not a pull request! No pull request found in context');
     }
     
-    return this.context.payload.pull_request.number;
+    return +core.getInput('pr');
   };
 
   async comment_on_pull_request_async(pr_number: number, comment: string): Promise<void> {

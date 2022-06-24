@@ -1,7 +1,11 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GitHubClientWrapper = void 0;
 const github_1 = require("@actions/github");
+const core_1 = __importDefault(require("@actions/core"));
 class GitHubClientWrapper {
     context;
     restClient;
@@ -15,10 +19,10 @@ class GitHubClientWrapper {
     }
     ;
     get_current_pull_request_number() {
-        if (!this.context.payload.pull_request) {
+        if (!this.context.payload.pull_request || !core_1.default.getInput('pr')) {
             throw new Error('This is not a pull request! No pull request found in context');
         }
-        return this.context.payload.pull_request.number;
+        return +core_1.default.getInput('pr');
     }
     ;
     async comment_on_pull_request_async(pr_number, comment) {
