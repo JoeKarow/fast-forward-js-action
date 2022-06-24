@@ -120,5 +120,5 @@ temp/
 ### VisualStudioCode Patch ###
 # Ignore all local history of files
 .history
-
+.dccache
 # End of https://www.gitignore.io/api/node,visualstudiocode

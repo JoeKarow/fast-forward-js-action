@@ -17,11 +17,11 @@ export class GitHubClientWrapper implements GitHubClient{
   };
   
   get_current_pull_request_number(): number {
-    if (!this.context.payload.issue || !this.context.payload.issue.pull_request){
-      throw new Error('Issue is not a pull request! No pull request found in context');
+    if (!this.context.payload.pull_request){
+      throw new Error('This is not a pull request! No pull request found in context');
     }
     
-    return this.context.payload.issue.number;
+    return this.context.payload.pull_request.number;
   };
 
   async comment_on_pull_request_async(pr_number: number, comment: string): Promise<void> {
